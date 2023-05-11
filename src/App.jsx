@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import { Routes, Route } from "react-router-dom";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -11,10 +12,12 @@ function App() {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          <Route path="/" element={<Home />} />\
-        </Routes>
+        <AnimatePresence>
+          <CssBaseline />
+          <Routes>
+            <Route path="/" element={<Home />} />\
+          </Routes>
+        </AnimatePresence>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

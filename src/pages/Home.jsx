@@ -1,11 +1,12 @@
 import { Box, Container, Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import { motion, useAnimate, usePresence } from "framer-motion";
+import { motion, useAnimate, usePresence, useMotionValue } from "framer-motion";
 
 const Home = () => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   const [isPresent, safeToRemove] = usePresence();
   const [scope, animate] = useAnimate();
+  const test = useMotionValue(0);
 
   const [introStatus, setIntroStatus] = useState(0);
   const [counter, setCounter] = useState(0);
@@ -15,14 +16,13 @@ const Home = () => {
       const enterAnimation = async () => {
         await animate(scope.current, {
           opacity: [0, 1],
-          color: ["white", "red"],
-          duration: 20,
-          delay: 20,
+          duration: 4000,
+          delay: 0.2,
         });
       };
       console.log("useEffect");
       enterAnimation();
-    } else {
+    } /* else {
       const exitAnimation = async () => {
         await animate(scope.current, {
           opacity: [1, 0],
@@ -32,8 +32,8 @@ const Home = () => {
         safeToRemove();
       };
       exitAnimation();
-    }
-  });
+    } */
+  }, [counter]);
 
   return (
     <Container>
@@ -74,11 +74,25 @@ const Home = () => {
 
           <Button
             onClick={() => {
-              setIntroStatus(0), introTimer();
+              setCounter(counter + 1);
+              /* setIntroStatus(0), introTimer(); */
             }}
           >
             Log
           </Button>
+
+          <Box>
+            <motion.div
+              style={{}}
+              animate={{
+                y: [`-100vh`, `0vh`],
+              }}
+            >
+              <Typography sx={{ fontSize: "40px" }}>Hello, world!</Typography>
+              <Typography sx={{ fontSize: "40px" }}>i'm alana</Typography>
+            </motion.div>
+          </Box>
+
           <Box ref={scope}>
             <Typography sx={{ fontSize: "40px" }}>Hello, world!</Typography>
             <Typography sx={{ fontSize: "40px" }}>i'm alana</Typography>
