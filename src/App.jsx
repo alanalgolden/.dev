@@ -1,16 +1,22 @@
 import { useState } from "react";
 import "./App.css";
-import { Container, Row, Col, Navbar, Button } from "@nextui-org/react";
-import { useTheme } from "@nextui-org/react";
-import Topbar from "./components/Topbar";
-import { Layout } from "./components/Layout";
+import Home from "./pages/Home";
+import { Routes, Route } from "react-router-dom";
+import { ColorModeContext, useMode } from "./theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 function App() {
-  useTheme("dark");
+  const [theme, colorMode] = useMode();
+
   return (
-    <>
-      <Layout />
-    </>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          <Route path="/" element={<Home />} />\
+        </Routes>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
