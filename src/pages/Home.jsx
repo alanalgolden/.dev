@@ -1,17 +1,39 @@
 import { Box, Container, Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import { motion, useAnimate, stagger } from "framer-motion";
+import { motion, useAnimate, usePresence } from "framer-motion";
 
 const Home = () => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-  const [introStatus, setIntroStatus] = useState(0);
-  const [steps, setSteps] = useState(0);
+  const [isPresent, safeToRemove] = usePresence();
+  const [scope, animate] = useAnimate();
 
-  const introTimer = async () => {
-    await delay(500);
-    console.log("Delayed 0.5 second.");
-    setIntroStatus(+1);
-  };
+  const [introStatus, setIntroStatus] = useState(0);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (isPresent) {
+      const enterAnimation = async () => {
+        await animate(scope.current, {
+          opacity: [0, 1],
+          color: ["white", "red"],
+          duration: 20,
+          delay: 20,
+        });
+      };
+      console.log("useEffect");
+      enterAnimation();
+    } else {
+      const exitAnimation = async () => {
+        await animate(scope.current, {
+          opacity: [1, 0],
+          duration: 0.5,
+          delay: 0.2,
+        });
+        safeToRemove();
+      };
+      exitAnimation();
+    }
+  });
 
   return (
     <Container>
@@ -57,6 +79,10 @@ const Home = () => {
           >
             Log
           </Button>
+          <Box ref={scope}>
+            <Typography sx={{ fontSize: "40px" }}>Hello, world!</Typography>
+            <Typography sx={{ fontSize: "40px" }}>i'm alana</Typography>
+          </Box>
         </Box>
       </Box>
     </Container>
